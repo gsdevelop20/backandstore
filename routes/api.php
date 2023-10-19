@@ -29,8 +29,8 @@ Route::get('/users/{id}', function (string $id) {
     return 'User '.$id;
 });
 
-Route::get('teste', function (Request $request) {
-   $user = new App\Models\Users();
+Route::get('allProducts', function (Request $request) {
+   $Product = new App\Models\Products();
    /*
    $user->firstName = 'gabriel';
    $user->lastName = 'santos';
@@ -39,8 +39,15 @@ Route::get('teste', function (Request $request) {
    $user->registrationDate='20/08/2022';
    $user->save();
    */
+    $produts = $Product::all();
+    $data = [];
 
-    return $user::all();
+    foreach ($produts as $key => $value){
+        $value->url = asset("storage/productImg/$value->url");
+        $data[$key] = $value;
+    }
+
+    return $data;
 });
 
 Route::post('verifylogin', function (Request $request) {
@@ -75,6 +82,32 @@ Route::post('userRegister', function (Request $request) {
     }
 
     return ['success' => false];
+});
+
+Route::post('saveproduct', function (Request $request) {
+
+    $data = [
+        'sellerid' => $request->get('sellerid'),
+        'productname' => $request->get('productname'),
+        'description' => $request->get('description'),
+        'price' => $request->get('price'),
+        'stockquantity' => $request->get('stockquantity'),
+        'category' => $request->get('category'),
+        'productimg' => $request->file('productimg'),
+    ];
+
+    //return ['success' => $data['category']];
+
+    $product = new \App\Models\Products();
+
+    if($product->setProduct($data)){
+        return ['success' => true];
+    }
+
+    return ['success' => false];
+
+
+
 });
 
 
