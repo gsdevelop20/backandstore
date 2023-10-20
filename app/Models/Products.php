@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class Products extends Model
@@ -41,5 +42,10 @@ class Products extends Model
         }
         return false;
 
+    }
+
+    public static function get_product_by_id($productid){
+
+        return DB::table('Products')->where('ProductID', $productid)->first();
     }
 }

@@ -106,8 +106,18 @@ Route::post('saveproduct', function (Request $request) {
 
     return ['success' => false];
 
+});
 
+Route::get('/product/{id}', function (string $id) {
+    $product = [];
 
+    if(isset($id)){
+        $product = \App\Models\Products::get_product_by_id($id);
+    }
+
+    $product->url = asset("storage/productImg/".$product->url);
+
+    return [$product];
 });
 
 
