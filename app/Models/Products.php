@@ -29,7 +29,7 @@ class Products extends Model
         $this->Category = $data['category'];
 
         $img = $data['productimg'];
-        if(!empty($img)) {
+        if (!empty($img)) {
             $extension = $img->extension();
             $imgName = md5($img->getClientOriginalName()) . '.' . $extension;
             $img->move(storage_path('app/public/productImg'), $imgName);
@@ -41,10 +41,10 @@ class Products extends Model
             return true;
         }
         return false;
-
     }
 
-    public static function get_product_by_id($productid){
+    public static function get_product_by_id($productid)
+    {
 
         return DB::table('Products')->where('ProductID', $productid)->first();
     }

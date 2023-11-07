@@ -120,5 +120,37 @@ Route::get('/product/{id}', function (string $id) {
     return [$product];
 });
 
+Route::post('saveComment', function (Request $request) {
+
+    $data = [
+        'userid' => $request->get('userid'),
+        'productid' => $request->get('productid'),
+        'comment' => $request->get('comment'),
+    ];
+
+    //return ['success' => $data['category']];
+
+    $reviews = new \App\Models\Reviews();
+
+    if($reviews->setComent($data)){
+        return ['success' => true];
+    }
+
+    return ['success' => false];
+});
+
+Route::get('/getAllComment/{id}', function (string $id) {
+    $comment =  \App\Models\Reviews::get_reviews_by_productid($id);
+    $data = [];
+
+    foreach ( $comment as $key => $value ) {
+        $user = \App\Models\Users::get_user_by_id($value->UserID);
+
+        $value->username = "$user->firstName $user->lastName";
+        $data[$key] = $value;
+    }
+
+    return $data;
+});
 
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Users extends Model
 {
@@ -32,5 +33,10 @@ class Users extends Model
             return false;
         }
         return true;
+    }
+
+    public static function get_user_by_id($user)
+    {
+        return DB::table('Users')->where('userId', $user)->first();
     }
 }
