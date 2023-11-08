@@ -153,4 +153,29 @@ Route::get('/getAllComment/{id}', function (string $id) {
     return $data;
 });
 
+Route::post('/DeleteComment', function (Request $request) {
+    $reviewid = $request->get('commentid');
+
+    $review = new \App\Models\Reviews();
+
+    if($review->deleteReview($reviewid)) {
+        return ['success' => true];
+    }
+
+    return ['success' => false];
+});
+
+Route::post('/editComment', function (Request $request) {
+    $reviewid = $request->get('commentid');
+    $comment = $request->get('newcomment');
+
+    $review = new \App\Models\Reviews();
+
+    if($review->editReview($reviewid, $comment)) {
+        return ['success' => true];
+    }
+
+    return ['success' => false];
+});
+
 

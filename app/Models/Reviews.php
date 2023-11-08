@@ -33,8 +33,33 @@ class Reviews extends Model
         return false;
     }
 
-    public static function get_reviews_by_productid($productid){
-        return DB::table('Reviews')->where('ProductID', $productid) ->orderBy('ReviewDate', 'desc')->get();
+    public function deleteReview($Reviewid)
+    {
+        $Review = DB::table('Reviews')->where('ReviewID', $Reviewid)->first();
+
+        if ($Review) {
+            DB::table('Reviews')->where('ReviewID', $Reviewid)->delete();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function editReview($id, $comment)
+    {
+        $Review = DB::table('Reviews')->where('ReviewID', $id)->first();
+
+        if ($Review) {
+            DB::table('Reviews')->where('ReviewID', $id)->update(['Comment' => $comment]);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function get_reviews_by_productid($productid)
+    {
+        return DB::table('Reviews')->where('ProductID', $productid)->orderBy('ReviewDate', 'desc')->get();
     }
 }
 
