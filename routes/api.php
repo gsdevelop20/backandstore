@@ -178,4 +178,52 @@ Route::post('/editComment', function (Request $request) {
     return ['success' => false];
 });
 
+Route::get('/getUserProduct/{id}', function (string $id) {
+    $Product = new \App\Models\Products();
+
+    $produts = $Product->get_product_by_userid($id);
+
+    $data = [];
+
+    foreach ($produts as $key => $value){
+        $value->url = asset("storage/productImg/$value->url");
+        $data[$key] = $value;
+    }
+
+    return $data;
+});
+
+Route::post('editproduct', function (Request $request) {
+
+    $data = [
+        'productid' => $request->get('productid'),
+        'productname' => $request->get('productname'),
+        'description' => $request->get('description'),
+        'price' => $request->get('price'),
+        'stockquantity' => $request->get('stockquantity'),
+        'category' => $request->get('category'),
+        'productimg' => $request->file('productimg'),
+    ];
+
+    $product = new \App\Models\Products();
+
+    if($product->editProduct($data)){
+        return ['success' => true];
+    }
+
+    return ['success' => false];
+});
+
+Route::post('/DeleteProduct', function (Request $request) {
+    $prductid = $request->get('productid');
+
+    $review = new \App\Models\Products();
+
+    if($review->deleteProductById($prductid)) {
+        return ['success' => true];
+    }
+
+    return ['success' => false];
+});
+
 

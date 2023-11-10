@@ -44,6 +44,17 @@ class Reviews extends Model
             return false;
         }
     }
+    public function deleteReviewbyProductId($ProductId)
+    {
+       $Review = DB::table('Reviews')->where('ProductID', $ProductId)->first();
+
+        if ($Review) {
+            DB::table('Reviews')->where('ProductID', $ProductId)->delete();
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public function editReview($id, $comment)
     {

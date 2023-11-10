@@ -43,9 +43,55 @@ class Products extends Model
         return false;
     }
 
+    public function editProduct($data)
+    {
+        $update = [
+            'ProductName' => $data['productname'],
+            'Description' => $data['description'],
+            'Price' => $data['price'],
+            'StockQuantity' => $data['stockquantity'],
+            'Category' => $data['category']
+        ];
+
+        $img = $data['productimg'];
+        if (!empty($img)) {
+            $extension = $img->extension();
+            $imgName = md5($img->getClientOriginalName()) . '.' . $extension;
+            $img->move(storage_path('app/public/productImg'), $imgName);
+
+            $update['url'] = $imgName;
+        }
+
+        $Review = DB::table($this->table)->where('ProductID', $data['productid'] )->first();
+
+        if ($Review) {
+            DB::table($this->table)->where('ProductID', $data['productid'] )->update($update);
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function deleteProductById($productid)
+    {
+        $Review = DB::table($this->table)->where('ProductID', $productid)->first();
+
+        if ($Review) {
+            $review = new \App\Models\Reviews();
+            $review->deleteReviewbyProductId($productid);
+            DB::table($this->table)->where('ProductID', $productid)->delete();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static function get_product_by_id($productid)
     {
-
         return DB::table('Products')->where('ProductID', $productid)->first();
+    }
+
+    public function get_product_by_userid($userid)
+    {
+        return DB::table('Products')->where('SellerID', $userid)->select('*')->get();
     }
 }
