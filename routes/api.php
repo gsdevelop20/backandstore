@@ -226,4 +226,50 @@ Route::post('/DeleteProduct', function (Request $request) {
     return ['success' => false];
 });
 
+Route::get('/getUser/{id}', function (string $id) {
+    $user = \App\Models\Users::get_user_by_id($id);
+    $userinfo = \App\Models\UserInfor::get_user_info_by_user_id($id);
+
+    $user = array_merge((array)$user,(array)$userinfo);
+
+
+    return [$user];
+});
+
+Route::post('/createOrder', function (Request $request) {
+    $data = [
+        'userid' => $request->get('userid'),
+        'email' => $request->get('email'),
+        'productid' => $request->get('productid'),
+        'quantity' => $request->get('quantity'),
+        'subtotal' => $request->get('subtotal'),
+    ];
+
+   $order = new \App\Models\Order();
+    if ($order->setOrder($data)) {
+        if($paymentinfo = \App\Models\Order::pix_qrcode_generete($data['email'], $data['subtotal'])) {
+            return [$paymentinfo];
+        }
+    }
+
+    return false;
+});
+
+Route::get('/getOrder/{id}', function (string $id) {
+    $ordes = \App\Models\Order::get_order_by_userid($id);
+
+    $Product = new \App\Models\Products();
+
+    foreach ($ordes as $key => $order){
+        $produts = $Product->get_product_by_id($order->ProductID);
+        $order->productname = $produts->ProductName;
+        $order->productimg =  asset("storage/productImg/$produts->url");
+        $o[$key] = $order;
+    }
+
+    return $o;
+});
+
+
+
 
