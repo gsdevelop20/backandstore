@@ -32,6 +32,7 @@ class Order extends Model
             $data['orderid'] = $this->id;
             $userInfo = new OrdeItem();
             $userInfo->setOrderItem($data);
+            \App\Models\Products::update_stock_by_id($data['productid'], $data['stock'],$data['quantity'] );
         } else {
             return false;
         }

@@ -243,6 +243,7 @@ Route::post('/createOrder', function (Request $request) {
         'productid' => $request->get('productid'),
         'quantity' => $request->get('quantity'),
         'subtotal' => $request->get('subtotal'),
+        'stock' => $request->get('stock'),
     ];
 
    $order = new \App\Models\Order();

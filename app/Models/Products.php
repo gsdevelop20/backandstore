@@ -93,6 +93,11 @@ class Products extends Model
     {
         return DB::table('Products')->where('ProductID', $productid)->first();
     }
+    public static function update_stock_by_id($productid, $current, $at)
+    {
+        $up = $current - $at;
+        return DB::table('Products')->where('ProductID', $productid )->update(['StockQuantity' => $up]);
+    }
 
     public function get_product_by_userid($userid)
     {
