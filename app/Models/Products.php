@@ -77,6 +77,10 @@ class Products extends Model
 
         if ($Review) {
             $review = new \App\Models\Reviews();
+            //DB::table('OrderItems')->where('ProductID', $productid)->delete();
+            $orderIDsToDelete = DB::table('OrderItems')->where('ProductID', $productid)->pluck('OrderID')->toArray();
+            DB::table('OrderItems')->where('ProductID', $productid)->delete();
+            DB::table('Orders')->whereIn('OrderID', $orderIDsToDelete)->delete();
             $review->deleteReviewbyProductId($productid);
             DB::table($this->table)->where('ProductID', $productid)->delete();
             return true;
