@@ -76,6 +76,19 @@ class Order extends Model
             ->get();
     }
 
+    public function delete_order_by_id($orderid, $ordemitemid){
+        $order = DB::table($this->table)->where('OrderID', $orderid)->first();
+
+        if ($order) {
+            $order = new \App\Models\OrdeItem();
+            $order->deleteOrderbyId($ordemitemid);
+            DB::table($this->table)->where('OrderID', $orderid)->delete();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static function get_user_by_id($user)
     {
         return DB::table('Users')->where('userId', $user)->first();

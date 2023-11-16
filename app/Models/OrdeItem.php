@@ -31,6 +31,19 @@ class OrdeItem extends Model
         return false;
     }
 
+    public function deleteOrderbyId($id){
+
+        $order = DB::table($this->table)->where('OrderItemID', $id)->first();
+
+        if ($order) {
+            DB::table($this->table)->where('OrderItemID', $id)->delete();
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
     public static function get_user_by_id($user)
     {
         return DB::table('Users')->where('userId', $user)->first();

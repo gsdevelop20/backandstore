@@ -270,6 +270,19 @@ Route::get('/getOrder/{id}', function (string $id) {
     return $o;
 });
 
+Route::post('/Deleteorder', function (Request $request) {
+    $orderid = $request->get('orderid');
+    $orderitemid = $request->get('orderitemid');
+
+    $order = new \App\Models\Order();
+
+    if($order->delete_order_by_id($orderid,$orderitemid)) {
+        return ['success' => true];
+    }
+
+    return ['success' => false];
+});
+
 
 
 
