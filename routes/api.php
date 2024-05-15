@@ -193,6 +193,20 @@ Route::get('/getUserProduct/{id}', function (string $id) {
     return $data;
 });
 
+Route::get('/getProductByName/{name}', function (string $name) {
+    $Product = new \App\Models\Products();
+    $produts = $Product->get_product_by_name($name);
+
+    $data = [];
+    foreach ($produts as $produt) {
+        $produt->url = asset("storage/productImg/".$produt->url);
+        $data[] = $produt;
+    }
+
+    return $data;
+});
+
+
 Route::post('editproduct', function (Request $request) {
 
     $data = [

@@ -99,6 +99,12 @@ class Products extends Model
         return DB::table('Products')->where('ProductID', $productid )->update(['StockQuantity' => $up]);
     }
 
+    public static function get_product_by_name($name){
+        return DB::table('Products')
+            ->where('ProductName', 'like', '%' . $name . '%')
+            ->get();
+    }
+
     public function get_product_by_userid($userid)
     {
         return DB::table('Products')->where('SellerID', $userid)->select('*')->get();
