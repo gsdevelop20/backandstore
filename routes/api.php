@@ -28,7 +28,6 @@ Route::get('/users/{id}', function (string $id) {
     print "user";
     return 'User '.$id;
 });
-
 Route::get('allProducts', function (Request $request) {
    $Product = new App\Models\Products();
    /*
@@ -49,7 +48,6 @@ Route::get('allProducts', function (Request $request) {
 
     return $data;
 });
-
 Route::post('verifylogin', function (Request $request) {
     $user = new App\Models\Users();
 
@@ -66,7 +64,6 @@ Route::post('verifylogin', function (Request $request) {
     }
     return ['error' => 'error'] ;
 });
-
 Route::post('userRegister', function (Request $request) {
     $data = [
         'firstname' => $request->get('firstname'),
@@ -83,7 +80,6 @@ Route::post('userRegister', function (Request $request) {
 
     return ['success' => false];
 });
-
 Route::post('saveproduct', function (Request $request) {
 
     $data = [
@@ -107,7 +103,6 @@ Route::post('saveproduct', function (Request $request) {
     return ['success' => false];
 
 });
-
 Route::get('/product/{id}', function (string $id) {
     $product = [];
 
@@ -119,7 +114,6 @@ Route::get('/product/{id}', function (string $id) {
 
     return [$product];
 });
-
 Route::post('saveComment', function (Request $request) {
 
     $data = [
@@ -138,9 +132,8 @@ Route::post('saveComment', function (Request $request) {
 
     return ['success' => false];
 });
-
 Route::get('/getAllComment/{id}', function (string $id) {
-    $comment =  \App\Models\Reviews::get_reviews_by_productid($id);
+    $comment = \App\Models\Reviews::get_reviews_by_productid($id);
     $data = [];
 
     foreach ( $comment as $key => $value ) {
@@ -152,7 +145,6 @@ Route::get('/getAllComment/{id}', function (string $id) {
 
     return $data;
 });
-
 Route::post('/DeleteComment', function (Request $request) {
     $reviewid = $request->get('commentid');
 
@@ -164,7 +156,6 @@ Route::post('/DeleteComment', function (Request $request) {
 
     return ['success' => false];
 });
-
 Route::post('/editComment', function (Request $request) {
     $reviewid = $request->get('commentid');
     $comment = $request->get('newcomment');
@@ -177,7 +168,6 @@ Route::post('/editComment', function (Request $request) {
 
     return ['success' => false];
 });
-
 Route::get('/getUserProduct/{id}', function (string $id) {
     $Product = new \App\Models\Products();
 
@@ -192,7 +182,6 @@ Route::get('/getUserProduct/{id}', function (string $id) {
 
     return $data;
 });
-
 Route::get('/getProductByName/{name}', function (string $name) {
     $Product = new \App\Models\Products();
     $produts = $Product->get_product_by_name($name);
@@ -205,8 +194,6 @@ Route::get('/getProductByName/{name}', function (string $name) {
 
     return $data;
 });
-
-
 Route::post('editproduct', function (Request $request) {
 
     $data = [
@@ -227,7 +214,6 @@ Route::post('editproduct', function (Request $request) {
 
     return ['success' => false];
 });
-
 Route::post('/DeleteProduct', function (Request $request) {
     $prductid = $request->get('productid');
 
@@ -249,7 +235,6 @@ Route::get('/getUser/{id}', function (string $id) {
 
     return [$user];
 });
-
 Route::post('/createOrder', function (Request $request) {
     $data = [
         'userid' => $request->get('userid'),
@@ -269,7 +254,6 @@ Route::post('/createOrder', function (Request $request) {
 
     return false;
 });
-
 Route::get('/getOrder/{id}', function (string $id) {
     $ordes = \App\Models\Order::get_order_by_userid($id);
 
@@ -284,7 +268,6 @@ Route::get('/getOrder/{id}', function (string $id) {
 
     return $o;
 });
-
 Route::post('/Deleteorder', function (Request $request) {
     $orderid = $request->get('orderid');
     $orderitemid = $request->get('orderitemid');
@@ -298,6 +281,4 @@ Route::post('/Deleteorder', function (Request $request) {
     return ['success' => false];
 });
 
-
-
-
+Route::get('/sales_report/{userid}',[\App\Http\Controllers\sales_report::class, 'report']);

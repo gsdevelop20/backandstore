@@ -41,11 +41,10 @@ class Order extends Model
 
     public static function pix_qrcode_generete($email, $subtotal)
     {
-        MercadoPagoConfig::setAccessToken("APP_USR-2221855852346831-102719-84e21a28e5c223c3b1982835e69ae1a9-284339554");
+        MercadoPagoConfig::setAccessToken("TEST-7060678731638258-030520-270223fbb6042104a0e5ef26cc523be4-284339554");
         $client = new PaymentClient();
         $data = [];
         try {
-
             $request = [
                 "transaction_amount" => floatval($subtotal),
                 "description" => "Pagameto",
