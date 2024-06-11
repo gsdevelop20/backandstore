@@ -12,24 +12,59 @@ class sales_report
         $this->userid = $userid;
     }
 
-    public function get_report(){
+    public function get_report_sale(){
         $data = [];
 
         $sql = "SELECT
-                    p.ProductID as productid,
+                    p.ProductID AS productid,
                     p.ProductName AS productname,
                     p.Category AS productcategory,
-                    CASE WHEN SUM(oi.Quantity) is null THEN 0 ELSE SUM(oi.Quantity) END AS quantity
+                    COALESCE(SUM(CASE WHEN o.Status != 'PAGAMENTO PENDENTE' THEN oi.Quantity ELSE 0 END), 0) AS quantity,
+                    COALESCE(SUM(CASE WHEN o.Status != 'PAGAMENTO PENDENTE' THEN oi.Subtotal ELSE 0 END), 0) AS total
                 FROM
                     Users u
                     JOIN Products p ON u.userId = p.SellerID
-                    LEFT JOIN OrderItems oi ON oi.ProductID = p.productID
+                    LEFT JOIN OrderItems oi ON oi.ProductID = p.ProductID
+                    LEFT JOIN Orders o ON o.OrderID = oi.OrderID
                 WHERE
                     u.userId = $this->userid
                 GROUP BY
+                    p.ProductID,
+                    p.ProductName,
+                    p.Category
+                ORDER BY
+                    p.ProductID";
+
+        if($record = DB::select($sql)){
+            $data = $record;
+        }
+
+        return $data;
+    }
+
+    public function get_report_order(){
+        $data = [];
+
+        $sql = "SELECT
+                    oi.OrderItemID AS ordernumber,
+                    p.ProductName AS productname,
+                    p.Category AS productcategory,
+                    oi.Quantity AS quantity,
+                    oi.Subtotal AS subtotal,
+                    o.Status AS paymentstatus,
+                    DATE_FORMAT(FROM_UNIXTIME(oi.OrderDate), '%d/%m/%Y %H:%i') AS orderdate
+                FROM
+                    Users u
+                    JOIN Products p ON u.userId = p.SellerID
+                    JOIN OrderItems oi ON oi.ProductID = p.productID
+                    JOIN Orders o on o.OrderID = oi.OrderItemID
+                WHERE
+                        u.userId = $this->userid
+                GROUP BY
                     p.ProductName,
                     p.Category,
-                    p.ProductID";
+                    oi.OrderItemID,
+                    p.ProductID;";
 
         if($record = DB::select($sql)){
             $data = $record;

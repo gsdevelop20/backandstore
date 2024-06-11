@@ -41,7 +41,7 @@ class Order extends Model
 
     public static function pix_qrcode_generete($email, $subtotal)
     {
-        MercadoPagoConfig::setAccessToken("TEST-7060678731638258-030520-270223fbb6042104a0e5ef26cc523be4-284339554");
+        MercadoPagoConfig::setAccessToken("APP_USR-7060678731638258-030520-bcb250c4dbf79ffe626c3d777dd09b50-284339554");
         $client = new PaymentClient();
         $data = [];
         try {
@@ -92,5 +92,31 @@ class Order extends Model
     public static function get_user_by_id($user)
     {
         return DB::table('Users')->where('userId', $user)->first();
+    }
+
+    public static function update_status($orderid, $status){
+        $return = false;
+
+        if($status == 'finished'){
+            $status = 'CONCLUÍDO';
+        } elseif ($status == "pendent"){
+            $status = 'PAGAMENTO PENDENTE';
+        }else{
+            return [
+              'success' => false,
+              'message' => 'Erro ao atualizar o status da compra. Paremetro status inválido.'
+            ];
+        }
+
+        $order = DB::table('Orders')->where('OrderID', $orderid)->first();
+        if ($order){
+            DB::table('Orders')->where('OrderID', $orderid)->update(['Status' => $status]);
+            $return = true;
+        }
+
+        return [
+            'success' => $return,
+            'message' => ''
+        ];
     }
 }

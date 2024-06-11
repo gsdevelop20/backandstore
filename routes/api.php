@@ -281,4 +281,9 @@ Route::post('/Deleteorder', function (Request $request) {
     return ['success' => false];
 });
 
-Route::get('/sales_report/{userid}',[\App\Http\Controllers\sales_report::class, 'report']);
+Route::get('/sales_report/{userid}',[\App\Http\Controllers\sales_report::class, 'report_sale']);
+Route::get('/sales_order_report/{userid}',[\App\Http\Controllers\sales_report::class, 'report_order']);
+
+Route::post('/updade_payment_status/{orderid}/{status}', function ($orderid, $status){
+   return \App\Models\Order::update_status($orderid, $status);
+});
